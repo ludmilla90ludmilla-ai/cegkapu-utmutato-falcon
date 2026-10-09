@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Útmutató külföldi tulajdonú cégeknek a Cégkapu (Company Gate, Ungarisches Firmenportal) és az Ügyfélkapu+ használatához – magyarul, angolul és németül.">
+<meta name="color-scheme" content="light">
+<style>[hidden] { display: none !important; }</style>
+<title>Cégkapu-útmutató</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap&subset=latin-ext" rel="stylesheet">
+<style>
+/* Elrendezés: ragadós fejléc + útvonaljelző, középen egy keskeny olvasóoszlop képernyőnként, éjkék lábléc.
+   Arculat: viktoriawp.eu (egyetlen kiemelőszín, Playfair cím / Montserrat szöveg, 6px gomb, 20px kártya, árnyék csak a fejlécen). */
+:root {
+  --bg: #FFFFFF;
+  --surface: #F0F0FF;      /* levendula – szekció/kártya háttér */
+  --ink: #011111;          /* címsor */
+  --text: #62636A;         /* szövegtörzs */
+  --accent: #02023B;       /* éjkék – egyetlen kiemelőszín */
+  --on-accent: #FFFFFF;
+  --line: #DBDBDF;
+  --footer-bg: #02023B;
+  --footer-fg: #FFFFFF;
+  --todo-bg: #FFF4CC;      /* kitöltendő helyőrző – csak szerkesztés idejére */
+  --todo-fg: #5A4500;
+  --header-shadow: 0 5px 10px rgba(0, 0, 0, .1);
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --font-accent: "Piazzolla", Georgia, serif;
+
+  --radius-btn: 6px;
+  --radius-card: 20px;
+  --col: 760px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #07071F; --surface: #111140; --ink: #F3F3FF; --text: #B4B5C8;
+    --accent: #D9D9FF; --on-accent: #02023B; --line: #2B2B5C;
+    --footer-bg: #111140; --footer-fg: #F3F3FF;
+    --todo-bg: #3A3110; --todo-fg: #FFE7A0;
+    --header-shadow: 0 5px 10px rgba(0, 0, 0, .45);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #07071F; --surface: #111140; --ink: #F3F3FF; --text: #B4B5C8;
+  --accent: #D9D9FF; --on-accent: #02023B; --line: #2B2B5C;
+  --footer-bg: #111140; --footer-fg: #F3F3FF;
+  --todo-bg: #3A3110; --todo-fg: #FFE7A0;
+  --header-shadow: 0 5px 10px rgba(0, 0, 0, .45);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+::selection { background: var(--accent); color: var(--on-accent); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; color: var(--ink); margin: 0; text-wrap: balance; }
+h1 { font-size: 48px; line-height: 1.25; }
+h2 { font-size: 36px; line-height: 1.3; }
+h3 { font-size: 22px; line-height: 1.35; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; }
+strong { color: var(--ink); font-weight: 600; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- Fejléc ---------- */
+.header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--bg);
+  box-shadow: var(--header-shadow);
+}
+.header__inner {
+  max-width: 1260px; margin-inline: auto;
+  padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.logo { font-family: var(--font-display); font-size: 24px; color: var(--ink); line-height: 1.2; }
+.logo small { display: block; font-family: var(--font-body); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text); }
+.langs { display: flex; gap: 4px; }
+.langs button {
+  font: 600 14px/1 var(--font-body); color: var(--ink);
+  background: transparent; border: 2px solid transparent; border-radius: var(--radius-btn);
+  padding: 8px 10px; cursor: pointer;
+}
+.langs button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- Útvonaljelző ---------- */
+.track { border-top: 1px solid var(--line); }
+.track ol {
+  list-style: none; margin: 0 auto; padding: 10px 20px;
+  max-width: 1260px;
+  display: flex; gap: 6px 22px; flex-wrap: wrap; justify-content: center;
+  font-size: 13px; font-weight: 600;
+}
+.track li { display: flex; align-items: center; gap: 8px; color: var(--text); opacity: .6; }
+.track li .n {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1.5px solid currentColor; font-size: 12px;
+}
+.track li.done { opacity: 1; }
+.track li.current { opacity: 1; color: var(--accent); }
+.track li.current .n { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* ---------- Tartalom ---------- */
+main { padding-inline: 20px; padding-block: 56px 72px; }
+.screen { max-width: var(--col); margin-inline: auto; display: grid; gap: 28px; }
+.screen:focus { outline: none; }
+.eyebrow { font-family: var(--font-accent); font-weight: 700; font-size: 19px; color: var(--accent); line-height: 1.3; }
+.head { display: grid; gap: 10px; }
+.lead { font-size: 18px; line-height: 1.65; }
+.meta { font-size: 14px; font-weight: 600; color: var(--ink); }
+
+.bullets { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.bullets li { padding-left: 22px; position: relative; }
+.bullets li::before { content: ""; position: absolute; left: 2px; top: .7em; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+.panel { background: var(--surface); border-radius: var(--radius-card); padding: 28px 30px; display: grid; gap: 10px; align-content: start; }
+.panel h3 { font-size: 20px; }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+
+.roles { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.role { display: grid; grid-template-columns: minmax(150px, 220px) 1fr; gap: 6px 24px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.role dt { font-weight: 700; color: var(--ink); }
+.role dd { margin: 0; }
+.tag { display: inline-block; margin-left: 6px; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--accent); color: var(--on-accent); vertical-align: 1px; }
+
+.callout { border-left: 3px solid var(--accent); padding: 4px 0 4px 18px; color: var(--ink); font-weight: 600; }
+
+/* Térkép a nyitóképernyőn: az út négy állomása */
+.route { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: r; }
+.route > div { position: relative; padding: 18px 16px 0 0; border-top: 2px solid var(--accent); }
+.route > div::before {
+  content: ""; position: absolute; top: -7px; left: 0;
+  width: 12px; height: 12px; border-radius: 50%; background: var(--accent);
+}
+.route b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 4px; }
+.route span { font-size: 14px; line-height: 1.5; display: block; }
+
+/* Lépések */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.step { display: grid; grid-template-columns: 56px 1fr; gap: 4px 18px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.step:first-child { border-top: 1px solid var(--line); }
+.step .num { font-family: var(--font-body); font-size: 34px; font-weight: 700; line-height: 1; color: var(--accent); font-variant-numeric: tabular-nums; }
+.step h3 { font-family: var(--font-body); font-size: 17px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; }
+.step .body { display: grid; gap: 8px; min-width: 0; }
+.step ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.step .note { font-size: 14px; font-style: italic; }
+.step .group { grid-column: 1 / -1; }
+.steps .divider { list-style: none; padding: 22px 0 6px; font-family: var(--font-accent); font-weight: 700; font-size: 17px; color: var(--accent); }
+.path { font-weight: 600; color: var(--ink); background: var(--surface); padding: 2px 8px; border-radius: var(--radius-btn); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.links { display: flex; flex-wrap: wrap; gap: 6px 18px; font-weight: 600; font-size: 15px; }
+.links a::after { content: "\00a0↗"; }
+
+/* Választókártyák */
+.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.choice { background: var(--surface); border-radius: var(--radius-card); padding: 28px 28px 30px; display: grid; gap: 14px; align-content: start; }
+.choice .letter { font-family: var(--font-display); font-size: 44px; line-height: 1; color: var(--accent); }
+.choice dl { margin: 0; display: grid; gap: 10px; }
+.choice dt { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+.choice dd { margin: 0; }
+.choice .btn { justify-self: start; margin-top: 6px; }
+
+.answers { display: grid; gap: 12px; }
+.answer {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  width: 100%; text-align: left;
+  font: 600 18px/1.4 var(--font-body); color: var(--ink);
+  background: var(--surface); border: 2px solid transparent; border-radius: var(--radius-card);
+  padding: 20px 24px; cursor: pointer;
+}
+.answer:hover { border-color: var(--accent); }
+.answer::after { content: "→"; color: var(--accent); font-size: 22px; }
+.hint { font-size: 15px; }
+
+/* Gombok */
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn {
+  display: inline-block; padding: 15px 30px;
+  border: 2px solid var(--accent); border-radius: var(--radius-btn);
+  background: var(--accent); color: var(--on-accent);
+  font: 700 14px/1 var(--font-body); text-transform: uppercase; letter-spacing: .02em;
+  text-decoration: none; cursor: pointer;
+}
+.btn:hover { opacity: .88; }
+.btn--ghost { background: transparent; color: var(--accent); }
+.btn--ghost:hover { background: var(--accent); color: var(--on-accent); opacity: 1; }
+.textbtn { background: none; border: 0; padding: 0; font: 700 15px/1.4 var(--font-body); color: var(--accent); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Összegzés */
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.checklist li { border-bottom: 1px solid var(--line); }
+.checklist label { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; cursor: pointer; color: var(--ink); font-weight: 600; }
+.checklist input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); flex: none; }
+.checklist input:checked + span { text-decoration: line-through; color: var(--text); font-weight: 400; }
+.chip { display: inline-block; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 99px; border: 1.5px solid var(--accent); color: var(--accent); }
+dl { margin: 0; }
+.datarow { display: grid; grid-template-columns: 1fr; gap: 0; padding: 6px 0; }
+.datarow dt { font-size: 13px; font-weight: 600; color: var(--ink); }
+.datarow dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.todo { background: var(--todo-bg); color: var(--todo-fg); padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+
+/* Fogalomtár */
+.glossary { max-width: var(--col); margin: 56px auto 0; border-top: 1px solid var(--line); padding-top: 8px; }
+.glossary summary { cursor: pointer; padding: 14px 0; font-family: var(--font-accent); font-weight: 700; font-size: 18px; color: var(--accent); }
+.glossary dl { margin: 0 0 8px; display: grid; gap: 0; }
+.glossary div { display: grid; grid-template-columns: minmax(140px, 200px) 1fr; gap: 4px 20px; padding: 10px 0; border-top: 1px solid var(--line); }
+.glossary dt { font-weight: 700; color: var(--ink); }
+.glossary dd { margin: 0; }
+
+/* Lábléc */
+footer { background: var(--footer-bg); color: var(--footer-fg); padding-inline: 20px; padding-block: 48px 36px; }
+footer .inner { max-width: var(--col); margin-inline: auto; display: grid; gap: 18px; }
+footer h2 { color: var(--footer-fg); font-size: 26px; }
+footer a { color: var(--footer-fg); }
+footer .contact { display: flex; flex-wrap: wrap; gap: 6px 28px; font-weight: 600; }
+footer .small { font-size: 13px; opacity: .8; border-top: 1px solid rgba(255,255,255,.2); padding-top: 16px; }
+footer .todo { color: var(--todo-fg); }
+
+@media (max-width: 767px) {
+  h1 { font-size: 32px; } h2 { font-size: 26px; } h3 { font-size: 19px; }
+  main { padding-block: 36px 56px; }
+  .lead { font-size: 17px; }
+  .route { grid-template-columns: 1fr; }
+  .route > div { border-top: 0; border-left: 2px solid var(--accent); padding: 0 0 18px 20px; }
+  .route > div::before { top: 2px; left: -7px; }
+  .role, .glossary div { grid-template-columns: 1fr; }
+  .header__inner { flex-wrap: nowrap; gap: 10px; }
+  .logo { font-size: 21px; min-width: 0; }
+  .logo small { font-size: 10px; letter-spacing: .05em; }
+  .langs button { padding: 8px 7px; }
+  .step { grid-template-columns: 40px 1fr; gap: 4px 12px; }
+  .step .num { font-size: 26px; }
+  .panel, .choice { padding: 24px 22px; }
+  .track ol { justify-content: flex-start; gap: 6px 14px; }
+  .track li .t { display: none; }
+  .track li.current .t { display: inline; }
+}
+@media print {
+  .header, .track, .actions, .glossary summary { display: none !important; }
+  .glossary { display: block; }
+  main { padding: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .screen { animation: in .25s ease both; }
+  @keyframes in { from { transform: translateY(6px); } to { transform: none; } }
+}
+</style>
+<style>
+/* Arculat: FALCON (fal-con.eu) – a falcon-stilus skill alapján.
+   A webes útmutató alapstílusa UTÁN töltődik be, és csak felülír: a tokeneket a FALCON-palettára
+   képezi le, a formákat szögletesre állítja. Csak világos mód van, mint a fal-con.eu-n.
+   Piros (#C1002A) = hangsúly, grafit (#58585A) = tömeg, Open Sans, nincs lekerekítés és árnyék. */
+:root,
+:root[data-theme="dark"] {
+  --bg: #FFFFFF;
+  --surface: #F0F0F0;
+  --ink: #000000;
+  --text: #58585A;
+  --accent: #C1002A;
+  --accent-dark: #9A0022;
+  --on-accent: #FFFFFF;
+  --line: #DDDDDD;
+  --footer-bg: #58585A;
+  --footer-fg: #FFFFFF;
+  --todo-bg: #FFF4CC;
+  --todo-fg: #5A4500;
+  --header-shadow: none;
+  --font-display: "Open Sans", Arial, Helvetica, sans-serif;
+  --font-body: "Open Sans", Arial, Helvetica, sans-serif;
+  --font-accent: "Open Sans", Arial, Helvetica, sans-serif;
+  --radius-btn: 0;
+  --radius-card: 0;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #FFFFFF; --surface: #F0F0F0; --ink: #000000; --text: #58585A;
+    --accent: #C1002A; --on-accent: #FFFFFF; --line: #DDDDDD;
+    --footer-bg: #58585A; --footer-fg: #FFFFFF;
+    --todo-bg: #FFF4CC; --todo-fg: #5A4500;
+    --header-shadow: none;
+    color-scheme: light;
+  }
+}
+
+/* Címsorok: egy betűcsalád, a súly tagol */
+h1, h2, h3 { font-weight: 600; }
+h1 { font-size: 40px; line-height: 1.2; }
+h2 { font-size: 32px; line-height: 1.2; }
+h3 { font-size: 22px; line-height: 1.3; }
+.eyebrow { font-size: 17px; font-weight: 700; }
+
+/* Fejléc: árnyék helyett vékony vonal; a logó kép, mellette elválasztva az útmutató neve */
+.header { border-bottom: 1px solid var(--line); }
+.logo { display: flex; align-items: center; gap: 14px; }
+.logo img { display: block; height: 48px; width: auto; }
+.logo small {
+  border-left: 1px solid var(--line); padding-left: 14px;
+  font-size: 15px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--text);
+}
+
+/* Nyelvválasztó = a fal-con.eu körvonalas menügombja */
+.langs { gap: 8px; }
+.langs button { border: 1px solid var(--accent); color: var(--accent); padding: 6px 12px; font-size: 15px; }
+.langs button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+
+/* Útvonaljelző: négyzetes sorszám */
+.track li .n { border-radius: 0; }
+
+/* Felsorolásjel, térképpont, címke, zseton: négyzet, nem pötty és nem pirula */
+.bullets li::before { border-radius: 0; top: .6em; }
+.route > div::before { border-radius: 0; }
+.tag, .chip { border-radius: 0; }
+.chip { border-width: 1px; }
+
+/* Választókártyák: a fal-con.eu blogkártyája – fehér, 1px piros keret */
+.choice { background: var(--bg); border: 1px solid var(--accent); }
+.choice .letter { font-weight: 700; }
+
+/* Válaszgombok: piros keret, hoverre tömör piros */
+.answer { background: var(--bg); border: 1px solid var(--accent); }
+.answer:hover { background: var(--accent); color: var(--on-accent); }
+.answer:hover::after { color: var(--on-accent); }
+
+/* Gombok: nincs nagybetű, 1px keret, hoverre sötétebb piros */
+.btn { border-width: 1px; text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 16px; padding: 12px 32px; }
+.btn:hover { opacity: 1; background: var(--accent-dark); border-color: var(--accent-dark); }
+.btn--ghost { background: var(--bg); }
+.btn--ghost:hover { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+/* Fogalomtár */
+.glossary summary { font-size: 17px; }
+
+/* Lábléc: grafit, jobb oldalon a lángmotívum */
+footer {
+  background: var(--footer-bg) url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNDAyLjQ1NyIgaGVpZ2h0PSI1NzQiIHZpZXdCb3g9IjAgMCA0MDIuNDU3IDU3NCI+DQogIDxwYXRoIGZpbGw9IiM2NDY0NjYiIGQ9Ik0xOTEuNzcsMGM3Ljk2LDEyLjE1NSwxNi4wNjcsMjQuMjE2LDIzLjg0NiwzNi40ODMsMTgsMjguMzc0LDMyLjk3NSw1Ny45LDM2Ljk4OSw5Mi4wMTMsNC41MDgsMzguMy00LjI0LDc0LjMyOC0xOS42NTksMTA4LjYzM0MxODguMzM4LDMzNi4zNzEsMTQyLjgyNyw0MzUuMjA2LDk3LjYzLDUzNC4xODNjLTUuMTEzLDExLjE5NC0xMC4yOTMsMjIuMzY2LTE1Ljg3MSwzMy4zMzEtMS4yNjQsMi40ODctNC4yODQsNS43NjYtNi41NDYsNS44LTI0LjI0Ny40Mi00OC41MDYuMjYxLTc1LjIxMy4yNjEsNi4wMjMtMjEuMjQ2LDEwLjg0LTQxLjI4NSwxNy4zNTktNjAuNzUzUTEwMi42MjMsMjU4LjEzMSwxODguNDE1LDMuNjE1Yy40MTItMS4yMjUuOTM3LTIuNDExLDEuNDEtMy42MTVaIi8+DQogIDxwYXRoIGZpbGw9IiM2NDY0NjYiIGQ9Ik01Mi4yNTQsNDkyLjIxNmM2NC4zMi0xMzUuNzcsMTI3Ljg2Ni0yNjkuOSwxOTIuMzkyLTQwNi4xMTEsMy44MTksNy45ODMsNy40MTUsMTMuOTY3LDkuNjM2LDIwLjQyNCw3Ljc1OCwyMi41NTksMTYuNjEyLDQ0LjkxMiwyMi4wNjUsNjguMDQ2LDUuNTQxLDIzLjUtMy4wNzcsNDUuNzE5LTE0LjY1NCw2NS45MzZRMTkxLjIyMywzNjMuNiwxMTkuNzU2LDQ4Ni4xMjljLTEuNDQ3LDIuNDkzLTQuNDIsNS43NjYtNi43NSw1LjgyMy0xOS42MTMuNDY1LTM5LjI0My4yNjQtNjAuNzUyLjI2NCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNDkuMzY2IDgxLjM0NikiLz4NCiAgPHBhdGggZmlsbD0iIzY0NjQ2NiIgZD0iTTk3LjE1MSw0MjguODA3YzU1LjY3Ni05Mi45LDExMC4xNDYtMTgzLjc4MywxNjUuMTI1LTI3NS41MiwyMy4yOTIsNTIuOTM4LDMxLjk2OSwxMDQuMzE0LTMuNTc2LDE1NC4xNTctMjgsMzkuMjU3LTU2LjY4MSw3OC4wMjctODUuMjczLDExNi44NTVhMTEuNiwxMS42LDAsMCwxLTcuOSw0LjMxM2MtMjEuOTcuMzQ2LTQzLjk0Ny4xOTQtNjguMzczLjE5NCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOTEuNzgyIDE0NC44MTUpIi8+DQogIDxwYXRoIGZpbGw9IiM2NDY0NjYiIGQ9Ik0yNTQuNTk0LDIyMy41YzguMjc5LDQ0LjU0LDEyLjkwNSw4NS44NTgtNC45NTcsMTI2LjQ1Mi0zLjkxMSw4Ljg5MS04LjgzNywxMy4zNTMtMTkuNjQ4LDEyLjg3Mi0yMy4yNjMtMS4wMzMtNDYuNi0uMy02OS45MTMtLjMzOC0zLjA4NCwwLTYuMTY5LS4yOTItMTEuMzE4LS41NTJMMjU0LjU5NCwyMjMuNSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQwLjUzNyAyMTEuMTQ0KSIvPg0KPC9zdmc+DQo=") no-repeat right 6% center / auto 88%;
+}
+footer h2 { font-size: 24px; }
+footer .small { opacity: .9; border-top-color: rgba(255,255,255,.25); }
+
+@media (max-width: 767px) {
+  h1 { font-size: 28px; } h2 { font-size: 24px; } h3 { font-size: 19px; }
+  .logo { gap: 10px; }
+  .logo img { height: 34px; }
+  .logo small { font-size: 12px; padding-left: 10px; }
+  .langs button { padding: 5px 7px; font-size: 14px; }
+  footer { background-size: auto 60%; background-position: right -40px bottom 20px; }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header__inner">
+    <div class="logo" id="logo"></div>
+    <div class="langs" id="langs" role="group" aria-label="Nyelv / Language"></div>
+  </div>
+  <nav class="track" aria-label="Útvonal"><ol id="track"></ol></nav>
+</header>
+
+<main>
+  <section class="screen" id="screen" tabindex="-1" aria-live="polite"></section>
+  <details class="glossary" id="glossary"></details>
+</main>
+
+<footer><div class="inner" id="footer"></div></footer>
+
+<script>
+/* ============================================================
+   IRODAI ADATOK – ezeket kell kitölteni.
+   A „[...]" formájú értékeket az oldal sárgán jelöli, amíg nincsenek kitöltve.
+   ============================================================ */
+const OFFICE = {
+  name: "FAL-CON CONSULTING Kft.",
+  contactName: "1112 Budapest, Boldizsár u. 4",
+  email: "office.budapest@fal-con.eu",
+  phone: "+36 1 279 17 65",
+  web: "https://www.fal-con.eu/",
+  logo: "data:image/png;base64,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"
+  // Forrás: a fal-con.eu lábléce, „FALCON Magyarországon” (2026. október).
+  // Az ügykezelők adatai itt sincsenek: az iroda Excelben küldi őket.
+};
+
+/* ============================================================
+   SZÖVEGEK – nyelvenként. Új nyelv = új kulcs ugyanezzel a szerkezettel.
+   ============================================================ */
+const LINKS = {
+  tarhely: "https://tarhely.gov.hu/ckp-regisztracio/",
+  idopont: "https://idopontfoglalo.kh.gov.hu/",
+  kulkepviselet: "https://konzuliszolgalat.kormany.hu/kulkepviseletek/osszes#magyarorszag-kulkepviseletei-kulfoldon",
+  ukplusz: "https://kau.gov.hu/dap/sugo/ugyfelkapu-plusz"
+};
+
+const STR = {
+  hu: {
+    langName: "Magyar",
+    docTitle: "Cégkapu-útmutató",
+    logoSub: "Cégkapu-útmutató",
+    trackLabel: "Útvonal",
+    track: ["Cégkapu", "Ügyfélkapu+", "Az Ön helyzete", "Teendők", "Összegzés"],
+    back: "Vissza",
+    next: "Tovább",
+    toSummary: "Tovább az összegzéshez",
+    restart: "Újrakezdés",
+    otherRoute: "Másik lehetőség megnézése",
+
+    start: {
+      eyebrow: "Új ügyfeleinknek",
+      h: "Hozzáférés a cég hivatalos postafiókjához",
+      lead: "Ahhoz, hogy a magyar hatóságokkal az Ön cége nevében kapcsolatot tarthassunk, hozzáférés kell a cég hivatalos elektronikus postafiókjához, a <strong>Cégkapuhoz</strong>. Ez az útmutató néhány rövid kérdés alapján megmutatja, mi a teendője.",
+      meta: "Kb. 5 perc elolvasni",
+      routeTitle: "Így áll össze",
+      route: [
+        ["Cégkapu", "A cég hivatalos postafiókja a hatóságok felé."],
+        ["Ügyfélkapu+", "Ezzel azonosítja magát az, aki a Cégkaput regisztrálja."],
+        ["Ön vagy ügyvédje", "Regisztrálja a Cégkaput, és kezeli a hozzáféréseket."],
+        ["Mi, ügykezelőként", "Intézzük a cég hatósági ügyeit."]
+      ],
+      btn: "Kezdjük"
+    },
+
+    cegkapu: {
+      eyebrow: "Mi a Cégkapu?",
+      h: "A cég hivatalos elektronikus postafiókja",
+      bullets: [
+        "Minden magyarországi cégnek kötelező, 2018 óta.",
+        "Ide küldi a leveleit az adóhatóság (NAV), a cégbíróság és a többi hatóság. A cég hivatalos levelezése szinte teljes egészében itt zajlik, ezért fontos, hogy valaki rendszeresen figyelje."
+      ],
+      askT: "Mit kérünk?",
+      ask: "Vegyen fel minket a Cégkapun <strong>ügykezelőnek</strong>. Így mi vesszük át a cég adóhatósági leveleit, szükség esetén eljárunk a cég nevében az adóhatóságoknál, és ha valamiben az Ön döntésére vagy közreműködésére van szükség, tájékoztatjuk a teendőkről.",
+      whyT: "Miért jó ez Önnek?",
+      why: "A szolgáltatásunkkal összefüggő ügyekben mi leszünk a cég kapcsolattartója az adóhatóságok felé. Önnek nem kell a magyar hivatali levelezéssel foglalkoznia: mi figyeljük, mi érkezik, és csak akkor keressük, ha valóban szükség van Önre.",
+      rolesT: "Ki kicsoda a Cégkapun?",
+      roles: [
+        ["Cégkapu-megbízott", "Regisztrálja a Cégkaput, és kezeli a hozzáféréseket. Ezt a szerepet nem mi töltjük be: Ön látja el, vagy az Ön által megbízott ügyvéd.", ""],
+        ["Ügykezelő", "Hozzáfér a cég hivatalos leveleihez, és intézi a hatósági ügyeket.", "Ez leszünk mi"]
+      ]
+    },
+
+    ugyfelkapu: {
+      eyebrow: "Mi kell hozzá?",
+      h: "Ügyfélkapu+: magyar digitális azonosítás",
+      bullets: [
+        "A Cégkaput egy <strong>magánszemélynek</strong> kell regisztrálnia. Ez általában a cég vezetője (ügyvezető, igazgató), vagy az, akit erre meghatalmaz.",
+        "Ehhez magyar elektronikus azonosítás kell: az <strong>Ügyfélkapu+</strong> (felhasználónév, jelszó és egy telefonos hitelesítő alkalmazás kódja) vagy a <strong>DÁP</strong> mobilalkalmazás.",
+        "Úgy működik, mint egy magyar digitális személyi igazolvány."
+      ],
+      callout: "Az Ügyfélkapu+-t külföldi állampolgárok is igényelhetik. A DÁP alkalmazás viszont elsősorban magyar állampolgároknak érhető el, ezért külföldi állampolgárként az Ügyfélkapu+ az Ön útja."
+    },
+
+    kerdes: {
+      eyebrow: "Az Ön helyzete",
+      h: "Rendelkezik a cég vezetője Ügyfélkapu+ vagy DÁP hozzáféréssel?",
+      yes: "Igen, van",
+      no: "Nincs",
+      unsure: "Nem tudom",
+      hint: "Ha soha nem járt személyesen magyar kormányablakban vagy konzulátuson ilyen ügyben, akkor valószínűleg nincs."
+    },
+
+    nem: {
+      eyebrow: "Az Ön helyzete",
+      h: "Két lehetősége van",
+      unsureNote: "Ha nem biztos benne, kezelje úgy, hogy nincs. Ha mégis kiderül, hogy van, az „Igen” út is nyitva áll.",
+      unsureLink: "Mégis van hozzáférése? Ide kattintson.",
+      what: "Mit jelent?",
+      plus: "Előny",
+      minus: "Amire számítson",
+      a: {
+        t: "Saját Ügyfélkapu+",
+        what: "Egyszer személyesen megjelenik egy magyar kormányablakban vagy egy magyar nagykövetségen/konzulátuson az Ön országában. Utána Ön regisztrálja a Cégkaput, és Ön lesz a megbízott.",
+        plus: "Ingyenes. A cég postafiókja felett közvetlenül Ön rendelkezik.",
+        minus: "Időpontot kell foglalnia, és el kell mennie.",
+        btn: "Ezt választom"
+      },
+      b: {
+        t: "Ügyvéd intézi Ön helyett",
+        what: "Meghatalmaz egy magyar ügyvédet, aki regisztrálja a Cégkaput, ellátja a megbízott szerepét, és felvesz minket ügykezelőnek.",
+        plus: "Nem kell utaznia és időpontot foglalnia.",
+        minus: "Ügyvédi díj. Meghatalmazást kell aláírnia.",
+        btn: "Ezt választom"
+      }
+    },
+
+    igen: {
+      eyebrow: "Teendők",
+      h: "Regisztrálja a Cégkaput, és vegyen fel minket",
+      altT: "Nem szeretné Ön ellátni a Cégkapu-megbízott szerepet?",
+      altBtn: "Válassza az ügyvédi utat"
+    },
+    yesSteps: [
+      { t: "Lépjen be a Cégkapu regisztrációs oldalán",
+        d: "Lépjen be az Ügyfélkapu+ vagy a DÁP adataival.",
+        links: [["tarhely", "Cégkapu regisztráció (tarhely.gov.hu)"]],
+        check: "Belépés a tarhely.gov.hu oldalon" },
+      { t: "Regisztrálja a cég Cégkapuját",
+        d: "Válassza ki a cég formáját, és adja meg az adatait. A rendszer ellenőrzi őket a cégjegyzékben. Ezzel Ön lesz a <strong>Cégkapu-megbízott</strong>.",
+        note: "Ha a cégnek már van Cégkapuja, ez a lépés kimarad.",
+        check: "A Cégkapu regisztrálása" },
+      { t: "Vegyen fel minket ügykezelőnek",
+        d: "<span class=\"path\">Beállítások → a cég kiválasztása → Ügykezelő regisztrálása</span>",
+        note: "Az ügykezelőként felveendő munkatársaink adatait a mellékelt Excel-táblázatban küldjük meg.",
+        check: "Felvett minket ügykezelőnek" },
+      { t: "Írjon nekünk",
+        d: "Mi jóváhagyjuk a meghívást, és visszaigazoljuk, hogy minden rendben van.",
+        check: "Jelzés nekünk" }
+    ],
+
+    utA: {
+      eyebrow: "Teendők: saját Ügyfélkapu+",
+      h: "Előbb Ügyfélkapu+, utána a Cégkapu",
+      part1: "Ügyfélkapu+ igénylése",
+      part2: "Utána: Cégkapu és ügykezelő"
+    },
+    aSteps: [
+      { t: "Foglaljon időpontot",
+        d: "Magyarországon bármelyik kormányablakba, külföldön az Ön országában lévő magyar nagykövetségre vagy konzulátusra.",
+        links: [["idopont", "Kormányablak időpontfoglalás"], ["kulkepviselet", "Magyar külképviseletek listája"]],
+        check: "Időpont foglalása" },
+      { t: "Vigye magával",
+        list: [
+          "EU/EGT- vagy svájci állampolgárként: érvényes <strong>útlevél vagy személyi igazolvány</strong>",
+          "Más állampolgárként: érvényes <strong>útlevél</strong>",
+          "Egy <strong>e-mail-címet</strong>, amelyet rendszeresen olvas",
+          "Az okostelefonját"
+        ],
+        check: "Személyes megjelenés az okmánnyal" },
+      { t: "Kapcsolja be a kétlépcsős belépést",
+        d: "A helyszínen létrehozzák az Ügyfélkapu-fiókját. Otthon telepítsen egy hitelesítő alkalmazást (pl. Google Authenticator vagy Microsoft Authenticator), és kapcsolja be az <strong>Ügyfélkapu+</strong> belépést.",
+        note: "A DÁP mobilalkalmazás külföldi állampolgárok számára jellemzően nem elérhető, és külképviseleten nem is lehet rá regisztrálni.",
+        links: [["ukplusz", "Ügyfélkapu+ súgó"]],
+        check: "Ügyfélkapu+ bekapcsolása" }
+    ],
+
+    utB: {
+      eyebrow: "Teendők: ügyvédi út",
+      h: "Egy ügyvéd intézi Ön helyett"
+    },
+    bSteps: [
+      { t: "Kérjen tőlünk ügyvédi elérhetőséget",
+        d: "Válaszoljon annak, aki ezt az útmutatót Önnek elküldte, és kérje, hogy adjuk meg egy ügyvéd elérhetőségét, akivel együtt dolgozunk.",
+        check: "Ügyvédi elérhetőség kérése tőlünk" },
+      { t: "Írja alá a meghatalmazást",
+        d: "Az ügyvéd elkészíti a meghatalmazást, és megmondja, hogyan kell aláírni, valamint milyen dokumentumokat kell még elküldeni neki.",
+        check: "A meghatalmazás aláírása és elküldése" },
+      { t: "Az ügyvéd regisztrálja a Cégkaput",
+        d: "Ellátja a <strong>Cégkapu-megbízott</strong> szerepét, és felvesz minket ügykezelőnek.",
+        check: "Az ügyvéd regisztrálta a Cégkaput" },
+      { t: "Mi jóváhagyjuk a meghívást",
+        d: "és visszaigazoljuk Önnek, hogy minden rendben van.",
+        check: "Visszaigazolás tőlünk" }
+    ],
+
+    kesz: {
+      eyebrow: "Összegzés",
+      h: "Az Ön teendőlistája",
+      routes: { igen: "Van Ügyfélkapu+", a: "Saját Ügyfélkapu+", b: "Ügyvédi út" },
+      checkHint: "Kipipálhatja, amivel megvan. A pipák csak ebben a böngészőben látszanak.",
+      oursT: "Mit adunk meg mi?",
+      ours: "Az ügykezelőként felveendő munkatársaink adatait külön <strong>Excel-táblázatban</strong> küldjük meg, ezt az útmutató mellé csatoltuk.",
+      oursB: "Az ügykezelőként felveendő munkatársaink adatait az ügyvéd közvetlenül tőlünk kapja meg, ezzel Önnek nincs teendője.",
+      contactT: "Kérdése van?",
+      contactText: "Írjon annak, aki ezt az útmutatót Önnek elküldte, és szívesen segítünk."
+    },
+
+
+    glossaryT: "Fogalomtár",
+    glossary: [
+      ["Cégkapu", "A cég hivatalos elektronikus postafiókja."],
+      ["Cégkapu-megbízott", "Aki a Cégkaput regisztrálta, és kezeli a hozzáféréseket (Ön vagy az ügyvédje)."],
+      ["Ügykezelő", "Akinek a megbízott hozzáférést adott a cég leveleihez. Ez leszünk mi."],
+      ["Ügyfélkapu+", "Magyar elektronikus azonosítás magánszemélyeknek, kétlépcsős belépéssel."],
+      ["DÁP", "A Digitális Állampolgárság mobilalkalmazás, az Ügyfélkapu+ alternatívája, elsősorban magyar állampolgároknak."],
+      ["Kormányablak", "Magyar kormányzati ügyfélszolgálati iroda."]
+    ],
+
+    footerT: "Kérdése van? Keressen minket.",
+    footerNote: "Az útmutató a 2026. októberi szabályokat követi. Források: tarhely.gov.hu, kau.gov.hu, a magyar külképviseletek tájékoztatói."
+  },
+
+  en: {
+    langName: "English",
+    docTitle: "Company Gate Guide",
+    logoSub: "Company Gate guide",
+    trackLabel: "Progress",
+    track: ["Company Gate", "Client Gate+", "Your situation", "Your steps", "Summary"],
+    back: "Back",
+    next: "Next",
+    toSummary: "Go to summary",
+    restart: "Start over",
+    otherRoute: "See the other option",
+
+    start: {
+      eyebrow: "For our new clients",
+      h: "Access to your company’s official mailbox",
+      lead: "To deal with the Hungarian authorities on your company’s behalf, we need access to its official electronic mailbox, called the <strong>Company Gate</strong> (Hungarian: <em>Cégkapu</em>). This guide asks a few short questions and then shows you exactly what to do.",
+      meta: "About 5 minutes to read",
+      routeTitle: "How it fits together",
+      route: [
+        ["Company Gate", "Your company’s official mailbox for communication with the authorities."],
+        ["Client Gate+ (Hungarian: Ügyfélkapu+)", "The login that identifies the person who registers the Company Gate."],
+        ["You or your lawyer", "Registers the Company Gate and manages who has access."],
+        ["Us, as case handlers", "We deal with your company’s matters with the authorities."]
+      ],
+      btn: "Let’s start"
+    },
+
+    cegkapu: {
+      eyebrow: "What is the Company Gate?",
+      h: "Your company’s official electronic mailbox",
+      bullets: [
+        "It has been mandatory for every Hungarian company since 2018.",
+        "The tax authority (NAV), the court of registration and other authorities send their letters here. Almost all of the company’s official correspondence happens here, so someone needs to check it regularly."
+      ],
+      askT: "What do we ask of you?",
+      ask: "Add us to the Company Gate as <strong>case handlers</strong> (<em>ügykezelő</em>). This lets us receive the company’s letters from the tax authorities, act on the company’s behalf before the tax authorities when needed, and tell you what to do whenever your decision or input is required.",
+      whyT: "Why is this good for you?",
+      why: "For matters related to our services, we become your company’s contact with the tax authorities. You don’t have to deal with Hungarian official correspondence: we keep an eye on what arrives and only contact you when we really need you.",
+      rolesT: "Who is who in the Company Gate?",
+      roles: [
+        ["Company Gate administrator (Cégkapu-megbízott)", "Registers the Company Gate and manages access to it. We do not take on this role: it is held by you or by a lawyer you appoint.", ""],
+        ["Case handler (ügykezelő)", "Has access to the company’s official letters and handles matters with the authorities.", "That’s us"]
+      ]
+    },
+
+    ugyfelkapu: {
+      eyebrow: "What is needed?",
+      h: "Client Gate+: Hungarian digital identification",
+      bullets: [
+        "The Company Gate has to be registered by an <strong>individual</strong>. This is usually the company’s managing director, or someone the company authorises.",
+        "This person needs a Hungarian electronic identification: <strong>Client Gate+</strong> (a username, a password and a code from an authenticator app on your phone) or the <strong>DÁP</strong> mobile app.",
+        "It works like a Hungarian digital ID card."
+      ],
+      callout: "Foreign citizens can also apply for Client Gate+. The DÁP app, however, is mainly available to Hungarian citizens, so as a foreign citizen, Client Gate+ is the way to go."
+    },
+
+    kerdes: {
+      eyebrow: "Your situation",
+      h: "Does the company’s managing director have Client Gate+ or DÁP access?",
+      yes: "Yes",
+      no: "No",
+      unsure: "I’m not sure",
+      hint: "If the managing director has never been in person to a Hungarian government office (kormányablak) or consulate to set this up, they most likely don’t have it."
+    },
+
+    nem: {
+      eyebrow: "Your situation",
+      h: "You have two options",
+      unsureNote: "If you’re not sure, assume there is no access. If it turns out there is, the “Yes” route is still open.",
+      unsureLink: "Have access after all? Click here.",
+      what: "What it means",
+      plus: "Advantage",
+      minus: "What to expect",
+      a: {
+        t: "Your own Client Gate+",
+        what: "You go once in person to a Hungarian government office (kormányablak) in Hungary, or to a Hungarian embassy or consulate in your country. Then you register the Company Gate yourself and become its administrator.",
+        plus: "Free of charge. You keep direct control of the company’s mailbox.",
+        minus: "You need to book an appointment and go in person.",
+        btn: "Choose this"
+      },
+      b: {
+        t: "A lawyer does it for you",
+        what: "You authorise a Hungarian lawyer, who registers the Company Gate, acts as its administrator and adds us as case handlers.",
+        plus: "No travel and no appointment needed.",
+        minus: "Lawyer’s fee. You need to sign a power of attorney.",
+        btn: "Choose this"
+      }
+    },
+
+    igen: {
+      eyebrow: "Your steps",
+      h: "Register the Company Gate and add us",
+      altT: "Don’t want to be the Company Gate administrator yourself?",
+      altBtn: "Choose the lawyer route"
+    },
+    yesSteps: [
+      { t: "Log in on the Company Gate registration page",
+        d: "Log in with your Client Gate+ or DÁP details.",
+        links: [["tarhely", "Company Gate registration (tarhely.gov.hu)"]],
+        check: "Logged in on tarhely.gov.hu" },
+      { t: "Register the Company Gate for your company",
+        d: "Select the company’s legal form and enter its details. The system checks them against the company register. This makes you the <strong>Company Gate administrator</strong>.",
+        note: "If the company already has a Company Gate, skip this step.",
+        check: "Company Gate registered" },
+      { t: "Add us as case handlers",
+        d: "<span class=\"path\">Beállítások (Settings) → select the company → Ügykezelő regisztrálása (Register case handler)</span>",
+        note: "We send the details of the colleagues to be added as case handlers in the attached Excel spreadsheet.",
+        check: "Added us as case handlers" },
+      { t: "Let us know",
+        d: "We accept the invitation and confirm that everything is in order.",
+        check: "Told us it’s done" }
+    ],
+
+    utA: {
+      eyebrow: "Your steps: your own Client Gate+",
+      h: "First Client Gate+, then the Company Gate",
+      part1: "Getting Client Gate+",
+      part2: "Then: Company Gate and case handlers"
+    },
+    aSteps: [
+      { t: "Book an appointment",
+        d: "In Hungary at any government office (kormányablak); abroad at the Hungarian embassy or consulate in your country.",
+        links: [["idopont", "Government office appointments (in Hungarian)"], ["kulkepviselet", "Hungarian embassies and consulates"]],
+        check: "Appointment booked" },
+      { t: "Bring with you",
+        list: [
+          "EU/EEA or Swiss citizens: a valid <strong>passport or national ID card</strong>",
+          "Other citizens: a valid <strong>passport</strong>",
+          "An <strong>email address</strong> you check regularly",
+          "Your smartphone"
+        ],
+        check: "Visited in person with my ID" },
+      { t: "Turn on two-step login",
+        d: "Your Client Gate account is created on the spot. At home, install an authenticator app (for example Google Authenticator or Microsoft Authenticator) and turn on <strong>Client Gate+</strong> login (in Hungarian: <em>Ügyfélkapu+</em>).",
+        note: "The DÁP mobile app is generally not available to foreign citizens, and you cannot register for it at an embassy or consulate.",
+        links: [["ukplusz", "Client Gate+ help (in Hungarian)"]],
+        check: "Client Gate+ turned on" }
+    ],
+
+    utB: {
+      eyebrow: "Your steps: the lawyer route",
+      h: "A lawyer does it for you"
+    },
+    bSteps: [
+      { t: "Ask us for a lawyer’s contact details",
+        d: "Reply to the person who sent you this guide and ask for the contact details of a lawyer we work with.",
+        check: "Asked us for a lawyer’s contact details" },
+      { t: "Sign the power of attorney",
+        d: "The lawyer prepares the power of attorney and tells you how to sign it and which documents to send.",
+        check: "Power of attorney signed and sent" },
+      { t: "The lawyer registers the Company Gate",
+        d: "They act as the <strong>Company Gate administrator</strong> and add us as case handlers.",
+        check: "Lawyer registered the Company Gate" },
+      { t: "We accept the invitation",
+        d: "and confirm to you that everything is in order.",
+        check: "Confirmation from us" }
+    ],
+
+    kesz: {
+      eyebrow: "Summary",
+      h: "Your checklist",
+      routes: { igen: "Already has Client Gate+", a: "Your own Client Gate+", b: "Lawyer route" },
+      checkHint: "Tick off what you have done. Ticks are only saved in this browser.",
+      oursT: "What do we provide?",
+      ours: "We send the details of the colleagues to be added as case handlers in a separate <strong>Excel spreadsheet</strong>, attached to this guide.",
+      oursB: "The lawyer receives the details of the colleagues to be added as case handlers directly from us, so there is nothing you need to do.",
+      contactT: "Any questions?",
+      contactText: "Reply to the person who sent you this guide and we will be happy to help."
+    },
+
+
+    glossaryT: "Glossary",
+    glossary: [
+      ["Company Gate (Cégkapu)", "The company’s official electronic mailbox."],
+      ["Company Gate administrator (Cégkapu-megbízott)", "The person who registered the Company Gate and manages access to it (you or your lawyer)."],
+      ["Case handler (ügykezelő)", "Someone the administrator has given access to the company’s letters. That will be us."],
+      ["Client Gate+ (Ügyfélkapu+)", "Hungarian electronic identification for individuals, with two-step login."],
+      ["DÁP", "The Digital Citizenship mobile app, an alternative to Client Gate+, mainly for Hungarian citizens."],
+      ["Kormányablak", "A Hungarian government customer service office."]
+    ],
+
+    footerT: "Questions? Get in touch.",
+    footerNote: "This guide reflects the rules as of October 2026. Sources: tarhely.gov.hu, kau.gov.hu, information from Hungarian embassies and consulates."
+  },
+
+  de: {
+    langName: "Deutsch",
+    docTitle: "Firmenportal-Leitfaden",
+    logoSub: "Firmenportal-Leitfaden",
+    trackLabel: "Fortschritt",
+    track: ["Firmenportal", "Kundenportal", "Ihre Situation", "Ihre Schritte", "Zusammenfassung"],
+    back: "Zurück",
+    next: "Weiter",
+    toSummary: "Zur Zusammenfassung",
+    restart: "Neu beginnen",
+    otherRoute: "Andere Möglichkeit ansehen",
+
+    start: {
+      eyebrow: "Für unsere neuen Mandanten",
+      h: "Zugang zum offiziellen Postfach Ihrer Gesellschaft",
+      lead: "Damit wir im Namen Ihrer Gesellschaft mit den ungarischen Behörden kommunizieren können, benötigen wir Zugang zu ihrem offiziellen elektronischen Postfach, dem <strong>Ungarischen Firmenportal</strong> (ungarisch: <em>Cégkapu</em>). Dieser Leitfaden zeigt Ihnen anhand weniger kurzer Fragen, was zu tun ist.",
+      meta: "Lesezeit ca. 5 Minuten",
+      routeTitle: "So hängt alles zusammen",
+      route: [
+        ["Ungarisches Firmenportal", "Das offizielle Postfach der Gesellschaft für die Kommunikation mit den Behörden."],
+        ["Ungarisches Kundenportal (Ügyfélkapu+)", "Damit identifiziert sich die Person, die das Firmenportal registriert."],
+        ["Sie oder Ihr Rechtsanwalt", "Registriert das Firmenportal und verwaltet die Zugänge."],
+        ["Wir als Sachbearbeiter", "Wir erledigen die Behördenangelegenheiten der Gesellschaft."]
+      ],
+      btn: "Los geht’s"
+    },
+
+    cegkapu: {
+      eyebrow: "Was ist das Ungarische Firmenportal?",
+      h: "Das offizielle elektronische Postfach Ihrer Gesellschaft",
+      bullets: [
+        "Seit 2018 ist es für jede ungarische Gesellschaft verpflichtend.",
+        "Die Steuerbehörde (NAV), das Firmengericht und andere Behörden senden ihre Schreiben hierher. Fast die gesamte offizielle Korrespondenz der Gesellschaft läuft darüber, deshalb muss es regelmäßig überwacht werden."
+      ],
+      askT: "Worum bitten wir Sie?",
+      ask: "Fügen Sie uns im Firmenportal als <strong>Sachbearbeiter</strong> (<em>ügykezelő</em>) hinzu. So nehmen wir die Schreiben der Steuerbehörden an die Gesellschaft entgegen, handeln bei Bedarf im Namen der Gesellschaft gegenüber den Steuerbehörden und informieren Sie über die nötigen Schritte, wenn Ihre Entscheidung oder Mitwirkung erforderlich ist.",
+      whyT: "Was haben Sie davon?",
+      why: "In Angelegenheiten, die mit unseren Leistungen zusammenhängen, sind wir der Ansprechpartner Ihrer Gesellschaft gegenüber den Steuerbehörden. Sie müssen sich nicht mit der ungarischen Behördenkorrespondenz befassen: Wir behalten im Blick, was eingeht, und melden uns nur, wenn wir Sie wirklich brauchen.",
+      rolesT: "Wer ist wer im Firmenportal?",
+      roles: [
+        ["Firmenportal-Verwalter (Cégkapu-megbízott)", "Registriert das Firmenportal und verwaltet die Zugänge. Diese Rolle übernehmen nicht wir: Sie übernehmen sie selbst oder ein von Ihnen beauftragter Rechtsanwalt.", ""],
+        ["Sachbearbeiter (ügykezelő)", "Hat Zugriff auf die offiziellen Schreiben der Gesellschaft und erledigt die Behördenangelegenheiten.", "Das sind wir"]
+      ]
+    },
+
+    ugyfelkapu: {
+      eyebrow: "Was wird benötigt?",
+      h: "Ungarisches Kundenportal: digitale Identifizierung",
+      bullets: [
+        "Das Firmenportal muss von einer <strong>natürlichen Person</strong> registriert werden. In der Regel ist das der Geschäftsführer der Gesellschaft oder eine von der Gesellschaft bevollmächtigte Person.",
+        "Diese Person benötigt eine ungarische elektronische Identifizierung: das <strong>Kundenportal</strong> mit zweistufiger Anmeldung (Benutzername, Passwort und ein Code aus einer Authenticator-App auf dem Smartphone) oder die Mobil-App <strong>DÁP</strong>.",
+        "Das funktioniert wie ein ungarischer digitaler Personalausweis."
+      ],
+      callout: "Einen Zugang zum Kundenportal können auch ausländische Staatsangehörige beantragen. Die DÁP-App steht dagegen in erster Linie ungarischen Staatsangehörigen zur Verfügung. Als ausländischer Staatsangehöriger ist das Kundenportal daher Ihr Weg."
+    },
+
+    kerdes: {
+      eyebrow: "Ihre Situation",
+      h: "Hat der Geschäftsführer der Gesellschaft Zugang zum Kundenportal oder zur DÁP-App?",
+      yes: "Ja",
+      no: "Nein",
+      unsure: "Ich weiß es nicht",
+      hint: "Falls der Geschäftsführer noch nie persönlich in einem ungarischen Regierungsbüro (kormányablak) oder Konsulat war, um dies einzurichten, besteht höchstwahrscheinlich kein Zugang."
+    },
+
+    nem: {
+      eyebrow: "Ihre Situation",
+      h: "Sie haben zwei Möglichkeiten",
+      unsureNote: "Wenn Sie unsicher sind, gehen Sie davon aus, dass kein Zugang besteht. Stellt sich heraus, dass doch einer besteht, steht Ihnen der Weg „Ja“ weiterhin offen.",
+      unsureLink: "Doch Zugang vorhanden? Hier klicken.",
+      what: "Was bedeutet das?",
+      plus: "Vorteil",
+      minus: "Was Sie erwartet",
+      a: {
+        t: "Eigener Zugang zum Kundenportal",
+        what: "Sie erscheinen einmal persönlich in einem ungarischen Regierungsbüro (kormányablak) in Ungarn oder in der ungarischen Botschaft bzw. dem Konsulat in Ihrem Land. Danach registrieren Sie das Firmenportal selbst und werden dessen Verwalter.",
+        plus: "Kostenlos. Sie verfügen direkt über das Postfach der Gesellschaft.",
+        minus: "Sie müssen einen Termin buchen und persönlich hingehen.",
+        btn: "Diesen Weg wählen"
+      },
+      b: {
+        t: "Ein Rechtsanwalt erledigt es für Sie",
+        what: "Sie bevollmächtigen einen ungarischen Rechtsanwalt, der das Firmenportal registriert, die Rolle des Verwalters übernimmt und uns als Sachbearbeiter hinzufügt.",
+        plus: "Keine Reise und kein Termin nötig.",
+        minus: "Anwaltshonorar. Sie müssen eine Vollmacht unterschreiben.",
+        btn: "Diesen Weg wählen"
+      }
+    },
+
+    igen: {
+      eyebrow: "Ihre Schritte",
+      h: "Registrieren Sie das Firmenportal und fügen Sie uns hinzu",
+      altT: "Möchten Sie die Rolle des Firmenportal-Verwalters nicht selbst übernehmen?",
+      altBtn: "Weg über einen Rechtsanwalt wählen"
+    },
+    yesSteps: [
+      { t: "Melden Sie sich auf der Registrierungsseite des Firmenportals an",
+        d: "Melden Sie sich mit Ihren Zugangsdaten für das Kundenportal oder die DÁP-App an.",
+        links: [["tarhely", "Registrierung im Firmenportal (tarhely.gov.hu)"]],
+        check: "Auf tarhely.gov.hu angemeldet" },
+      { t: "Registrieren Sie das Firmenportal der Gesellschaft",
+        d: "Wählen Sie die Rechtsform der Gesellschaft und geben Sie ihre Daten ein. Das System prüft sie anhand des Firmenregisters. Damit werden Sie <strong>Firmenportal-Verwalter</strong>.",
+        note: "Ist die Gesellschaft bereits im Firmenportal registriert, entfällt dieser Schritt.",
+        check: "Firmenportal registriert" },
+      { t: "Fügen Sie uns als Sachbearbeiter hinzu",
+        d: "<span class=\"path\">Beállítások (Einstellungen) → Gesellschaft auswählen → Ügykezelő regisztrálása (Sachbearbeiter registrieren)</span>",
+        note: "Die Daten der als Sachbearbeiter hinzuzufügenden Mitarbeiter senden wir Ihnen in der beigefügten Excel-Tabelle.",
+        check: "Uns als Sachbearbeiter hinzugefügt" },
+      { t: "Geben Sie uns Bescheid",
+        d: "Wir nehmen die Einladung an und bestätigen Ihnen, dass alles in Ordnung ist.",
+        check: "Uns Bescheid gegeben" }
+    ],
+
+    utA: {
+      eyebrow: "Ihre Schritte: eigener Zugang zum Kundenportal",
+      h: "Zuerst das Kundenportal, dann das Firmenportal",
+      part1: "Zugang zum Kundenportal beantragen",
+      part2: "Danach: Firmenportal und Sachbearbeiter"
+    },
+    aSteps: [
+      { t: "Buchen Sie einen Termin",
+        d: "In Ungarn in einem beliebigen Regierungsbüro (kormányablak), im Ausland in der ungarischen Botschaft oder dem Konsulat in Ihrem Land.",
+        links: [["idopont", "Terminbuchung Regierungsbüro (auf Ungarisch)"], ["kulkepviselet", "Ungarische Auslandsvertretungen"]],
+        check: "Termin gebucht" },
+      { t: "Bringen Sie mit",
+        list: [
+          "EU-/EWR- oder Schweizer Staatsangehörige: gültiger <strong>Reisepass oder Personalausweis</strong>",
+          "Andere Staatsangehörige: gültiger <strong>Reisepass</strong>",
+          "Eine <strong>E-Mail-Adresse</strong>, die Sie regelmäßig lesen",
+          "Ihr Smartphone"
+        ],
+        check: "Persönlich mit Ausweisdokument erschienen" },
+      { t: "Aktivieren Sie die zweistufige Anmeldung",
+        d: "Ihr Konto für das Kundenportal wird vor Ort eingerichtet. Installieren Sie zu Hause eine Authenticator-App (z. B. Google Authenticator oder Microsoft Authenticator) und aktivieren Sie die zweistufige Anmeldung (auf Ungarisch: <strong>Ügyfélkapu+</strong>).",
+        note: "Die DÁP-App steht ausländischen Staatsangehörigen in der Regel nicht zur Verfügung, und in Botschaften oder Konsulaten kann man sich dafür nicht registrieren.",
+        links: [["ukplusz", "Hilfe zum Kundenportal (auf Ungarisch)"]],
+        check: "Zweistufige Anmeldung aktiviert" }
+    ],
+
+    utB: {
+      eyebrow: "Ihre Schritte: über einen Rechtsanwalt",
+      h: "Ein Rechtsanwalt erledigt es für Sie"
+    },
+    bSteps: [
+      { t: "Bitten Sie uns um einen Anwaltskontakt",
+        d: "Antworten Sie der Person, die Ihnen diesen Leitfaden geschickt hat, und bitten Sie um die Kontaktdaten eines Rechtsanwalts, mit dem wir zusammenarbeiten.",
+        check: "Anwaltskontakt bei uns angefragt" },
+      { t: "Unterschreiben Sie die Vollmacht",
+        d: "Der Rechtsanwalt erstellt die Vollmacht und teilt Ihnen mit, wie sie zu unterschreiben ist und welche Unterlagen Sie ihm noch senden müssen.",
+        check: "Vollmacht unterschrieben und versandt" },
+      { t: "Der Rechtsanwalt registriert das Firmenportal",
+        d: "Er übernimmt die Rolle des <strong>Firmenportal-Verwalters</strong> und fügt uns als Sachbearbeiter hinzu.",
+        check: "Firmenportal vom Rechtsanwalt registriert" },
+      { t: "Wir nehmen die Einladung an",
+        d: "und bestätigen Ihnen, dass alles in Ordnung ist.",
+        check: "Bestätigung von uns" }
+    ],
+
+    kesz: {
+      eyebrow: "Zusammenfassung",
+      h: "Ihre Checkliste",
+      routes: { igen: "Zugang zum Kundenportal vorhanden", a: "Eigener Zugang zum Kundenportal", b: "Über einen Rechtsanwalt" },
+      checkHint: "Haken Sie ab, was erledigt ist. Die Häkchen werden nur in diesem Browser gespeichert.",
+      oursT: "Was stellen wir bereit?",
+      ours: "Die Daten der als Sachbearbeiter hinzuzufügenden Mitarbeiter senden wir Ihnen in einer separaten <strong>Excel-Tabelle</strong>, die diesem Leitfaden beigefügt ist.",
+      oursB: "Die Daten der als Sachbearbeiter hinzuzufügenden Mitarbeiter erhält der Rechtsanwalt direkt von uns. Sie müssen dafür nichts tun.",
+      contactT: "Haben Sie Fragen?",
+      contactText: "Antworten Sie der Person, die Ihnen diesen Leitfaden geschickt hat. Wir helfen Ihnen gern weiter."
+    },
+
+
+    glossaryT: "Glossar",
+    glossary: [
+      ["Ungarisches Firmenportal (Cégkapu)", "Das offizielle elektronische Postfach der Gesellschaft."],
+      ["Firmenportal-Verwalter (Cégkapu-megbízott)", "Die Person, die das Firmenportal registriert hat und die Zugänge verwaltet (Sie oder Ihr Rechtsanwalt)."],
+      ["Sachbearbeiter (ügykezelő)", "Eine Person, der der Verwalter Zugriff auf die Schreiben der Gesellschaft gewährt hat. Das werden wir sein."],
+      ["Ungarisches Kundenportal (Ügyfélkapu+)", "Elektronische Identifizierung für Privatpersonen in Ungarn, mit zweistufiger Anmeldung."],
+      ["DÁP", "Die Mobil-App „Digitale Staatsbürgerschaft“, eine Alternative zum Kundenportal, in erster Linie für ungarische Staatsangehörige."],
+      ["Kormányablak", "Ungarisches Bürgerbüro der Regierung."]
+    ],
+
+    footerT: "Fragen? Sprechen Sie uns an.",
+    footerNote: "Dieser Leitfaden entspricht dem Stand der Vorschriften vom Oktober 2026. Quellen: tarhely.gov.hu, kau.gov.hu, Informationen der ungarischen Auslandsvertretungen."
+  }
+};
+
+/* ============================================================
+   MŰKÖDÉS
+   ============================================================ */
+const SCREENS = ["start", "cegkapu", "ugyfelkapu", "kerdes", "igen", "nem", "ut-a", "ut-b", "kesz-igen", "kesz-a", "kesz-b"];
+const STAGE = { start: -1, cegkapu: 0, ugyfelkapu: 1, kerdes: 2, nem: 2, igen: 3, "ut-a": 3, "ut-b": 3, "kesz-igen": 4, "kesz-a": 4, "kesz-b": 4 };
+
+/* Nyelv: 1) a linkben megadott (#en, #de-ut-b), 2) a látogató korábbi választása,
+   3) a böngésző nyelve, 4) angol. */
+let lang = "en";
+let unsure = false;
+const checks = {};
+try { Object.assign(checks, JSON.parse(localStorage.getItem("ckp-checks") || "{}")); } catch (e) {}
+{
+  let stored = null;
+  try { stored = localStorage.getItem("ckp-lang"); } catch (e) {}
+  const nav = (navigator.language || "").slice(0, 2).toLowerCase();
+  lang = STR[stored] ? stored : STR[nav] ? nav : "en";
+}
+
+const S = () => STR[lang];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const val = v => /^\[.*\]$/.test(v) ? `<span class="todo">${esc(v)}</span>` : esc(v);
+
+/* A hash formája: [nyelv-]képernyő, pl. #ut-b, #de, #de-ut-b */
+function parseHash() {
+  let h = location.hash.replace("#", "");
+  let l = null;
+  const m = h.match(/^([a-z]{2})(?:-(.+))?$/);
+  if (m && STR[m[1]]) { l = m[1]; h = m[2] || "start"; }
+  return { l, id: SCREENS.includes(h) ? h : "start" };
+}
+function current() {
+  return parseHash().id;
+}
+function go(id) {
+  const target = `${lang}-${id}`;
+  if (location.hash.replace("#", "") === target) render(true);
+  else location.hash = target;
+}
+function setLang(l) {
+  lang = l;
+  try { localStorage.setItem("ckp-lang", lang); } catch (e) {}
+  try { history.replaceState(null, "", `#${lang}-${current()}`); } catch (e) {}
+}
+
+function linksHtml(links) {
+  if (!links) return "";
+  return `<div class="links">${links.map(([k, label]) => `<a href="${LINKS[k]}" target="_blank" rel="noopener">${label}</a>`).join("")}</div>`;
+}
+function stepHtml(s, n) {
+  return `<li class="step">
+    <span class="num" aria-hidden="true">${n}</span>
+    <div class="body">
+      <h3>${s.t}</h3>
+      ${s.d ? `<p>${s.d}</p>` : ""}
+      ${s.list ? `<ul>${s.list.map(x => `<li>${x}</li>`).join("")}</ul>` : ""}
+      ${s.note ? `<p class="note">${s.note}</p>` : ""}
+      ${linksHtml(s.links)}
+    </div>
+  </li>`;
+}
+const backBtn = to => `<button class="btn btn--ghost" data-go="${to}">← ${S().back}</button>`;
+const head = (eyebrow, h, extra = "") => `<div class="head"><span class="eyebrow">${eyebrow}</span><h2 id="screen-title">${h}</h2>${extra}</div>`;
+
+function routeSteps(route) {
+  const s = S();
+  if (route === "igen") return s.yesSteps;
+  if (route === "a") return s.aSteps.concat(s.yesSteps);
+  return s.bSteps;
+}
+
+const VIEWS = {
+  start() {
+    const s = S().start;
+    return `<div class="head">
+        <span class="eyebrow">${s.eyebrow}</span>
+        <h1 id="screen-title">${s.h}</h1>
+      </div>
+      <p class="lead">${s.lead}</p>
+      <div class="panel">
+        <h3>${s.routeTitle}</h3>
+        <div class="route">${s.route.map(([b, t]) => `<div><b>${b}</b><span>${t}</span></div>`).join("")}</div>
+      </div>
+      <div class="actions"><button class="btn" data-go="cegkapu">${s.btn} →</button><span class="meta">${s.meta}</span></div>`;
+  },
+  cegkapu() {
+    const s = S().cegkapu;
+    return `${head(s.eyebrow, s.h)}
+      <ul class="bullets">${s.bullets.map(b => `<li>${b}</li>`).join("")}</ul>
+      <div class="pair">
+        <div class="panel"><h3>${s.askT}</h3><p>${s.ask}</p></div>
+        <div class="panel"><h3>${s.whyT}</h3><p>${s.why}</p></div>
+      </div>
+      <div class="head"><h3>${s.rolesT}</h3></div>
+      <dl class="roles">${s.roles.map(([t, d, tag]) => `<div class="role"><dt>${t}${tag ? ` <span class="tag">${tag}</span>` : ""}</dt><dd>${d}</dd></div>`).join("")}</dl>
+      <div class="actions">${backBtn("start")}<button class="btn" data-go="ugyfelkapu">${S().next} →</button></div>`;
+  },
+  ugyfelkapu() {
+    const s = S().ugyfelkapu;
+    return `${head(s.eyebrow, s.h)}
+      <ul class="bullets">${s.bullets.map(b => `<li>${b}</li>`).join("")}</ul>
+      <p class="callout">${s.callout}</p>
+      <div class="actions">${backBtn("cegkapu")}<button class="btn" data-go="kerdes">${S().next} →</button></div>`;
+  },
+  kerdes() {
+    const s = S().kerdes;
+    return `${head(s.eyebrow, s.h)}
+      <div class="answers">
+        <button class="answer" data-go="igen">${s.yes}</button>
+        <button class="answer" data-go="nem">${s.no}</button>
+        <button class="answer" data-go="nem" data-unsure="1">${s.unsure}</button>
+      </div>
+      <p class="hint">${s.hint}</p>
+      <div class="actions">${backBtn("ugyfelkapu")}</div>`;
+  },
+  nem() {
+    const s = S().nem;
+    const card = (k, letter) => `<div class="choice">
+        <span class="letter" aria-hidden="true">${letter}</span>
+        <h3>${s[k].t}</h3>
+        <dl>
+          <div><dt>${s.what}</dt><dd>${s[k].what}</dd></div>
+          <div><dt>${s.plus}</dt><dd>${s[k].plus}</dd></div>
+          <div><dt>${s.minus}</dt><dd>${s[k].minus}</dd></div>
+        </dl>
+        <button class="btn" data-go="ut-${k}">${s[k].btn} →</button>
+      </div>`;
+    return `${head(s.eyebrow, s.h, unsure ? `<p class="hint">${s.unsureNote} <button class="textbtn" data-go="igen">${s.unsureLink}</button></p>` : "")}
+      <div class="choices">${card("a", "A")}${card("b", "B")}</div>
+      <div class="actions">${backBtn("kerdes")}</div>`;
+  },
+  igen() {
+    const s = S().igen;
+    return `${head(s.eyebrow, s.h)}
+      <ol class="steps">${S().yesSteps.map((st, i) => stepHtml(st, i + 1)).join("")}</ol>
+      <div class="panel"><h3>${s.altT}</h3><div><button class="btn btn--ghost" data-go="ut-b">${s.altBtn} →</button></div></div>
+      <div class="actions">${backBtn("kerdes")}<button class="btn" data-go="kesz-igen">${S().toSummary} →</button></div>`;
+  },
+  "ut-a"() {
+    const s = S().utA, A = S().aSteps, Y = S().yesSteps;
+    return `${head(s.eyebrow, s.h)}
+      <ol class="steps">
+        <li class="divider">${s.part1}</li>
+        ${A.map((st, i) => stepHtml(st, i + 1)).join("")}
+        <li class="divider">${s.part2}</li>
+        ${Y.map((st, i) => stepHtml(st, A.length + i + 1)).join("")}
+      </ol>
+      <div class="actions">${backBtn("nem")}<button class="btn" data-go="kesz-a">${S().toSummary} →</button></div>`;
+  },
+  "ut-b"() {
+    const s = S().utB;
+    return `${head(s.eyebrow, s.h)}
+      <ol class="steps">${S().bSteps.map((st, i) => stepHtml(st, i + 1)).join("")}</ol>
+      <div class="actions">${backBtn("nem")}<button class="btn" data-go="kesz-b">${S().toSummary} →</button></div>`;
+  },
+  kesz(route) {
+    const s = S().kesz;
+    const steps = routeSteps(route);
+    const ours = `<p>${route === "b" ? s.oursB : s.ours}</p>`;
+    return `${head(s.eyebrow, s.h, `<div><span class="chip">${s.routes[route]}</span></div>`)}
+      <ul class="checklist">${steps.map((st, i) => {
+        const id = `chk-${route}-${i}`;
+        return `<li><label for="${id}"><input type="checkbox" id="${id}" ${checks[id] ? "checked" : ""}><span>${i + 1}. ${st.check}</span></label></li>`;
+      }).join("")}</ul>
+      <p class="hint">${s.checkHint}</p>
+      <div class="pair">
+        <div class="panel"><h3>${s.oursT}</h3>${ours}</div>
+        <div class="panel"><h3>${s.contactT}</h3><p>${s.contactText}</p></div>
+      </div>
+      <div class="actions">
+        ${backBtn(route === "igen" ? "igen" : "ut-" + route)}
+        <button class="btn btn--ghost" data-go="kerdes">${S().otherRoute}</button>
+        <button class="textbtn" data-go="start">${S().restart}</button>
+      </div>`;
+  }
+};
+
+function renderChrome() {
+  const s = S();
+  document.documentElement.lang = lang;
+  document.title = s.docTitle;
+  const mark = OFFICE.logo ? `<img src="${OFFICE.logo}" alt="${esc(OFFICE.name)}">` : val(OFFICE.name);
+  document.getElementById("logo").innerHTML = `${mark}<small>${s.logoSub}</small>`;
+  document.querySelector(".track").setAttribute("aria-label", s.trackLabel);
+
+  const langs = Object.keys(STR);
+  const lb = document.getElementById("langs");
+  lb.hidden = langs.length < 2;
+  lb.innerHTML = langs.map(l => `<button data-lang="${l}" aria-pressed="${l === lang}" title="${STR[l].langName}">${l.toUpperCase()}</button>`).join("");
+
+  const g = document.getElementById("glossary");
+  const wasOpen = g.open;
+  g.innerHTML = `<summary>${s.glossaryT}</summary><dl>${s.glossary.map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join("")}</dl>`;
+  g.open = wasOpen;
+
+  document.getElementById("footer").innerHTML = `
+    <h2>${s.footerT}</h2>
+    <div class="contact"><span>${val(OFFICE.contactName)}</span><span>${val(OFFICE.email)}</span><span>${val(OFFICE.phone)}</span>${OFFICE.web ? `<a href="${OFFICE.web}" target="_blank" rel="noopener">${esc(OFFICE.web.replace(/^https?:\/\//, "").replace(/\/$/, ""))}</a>` : ""}</div>
+    <p class="small">${val(OFFICE.name)} · ${s.footerNote}</p>`;
+}
+
+function render(focus) {
+  const id = current();
+  const stage = STAGE[id];
+  const el = document.getElementById("screen");
+  el.innerHTML = id.startsWith("kesz-") ? VIEWS.kesz(id.slice(5)) : VIEWS[id]();
+  document.getElementById("track").innerHTML = S().track.map((t, i) => {
+    const cls = i < stage ? "done" : i === stage ? "current" : "";
+    return `<li class="${cls}" ${i === stage ? 'aria-current="step"' : ""}><span class="n">${i < stage ? "✓" : i + 1}</span><span class="t">${t}</span></li>`;
+  }).join("");
+  if (focus) {
+    window.scrollTo({ top: 0 });
+    el.focus({ preventScroll: true });
+  }
+}
+
+document.addEventListener("click", e => {
+  const g = e.target.closest("[data-go]");
+  if (g) {
+    if (g.dataset.go === "nem") unsure = !!g.dataset.unsure;
+    go(g.dataset.go);
+    return;
+  }
+  const l = e.target.closest("[data-lang]");
+  if (l) {
+    setLang(l.dataset.lang);
+    renderChrome(); render(false);
+  }
+});
+document.addEventListener("change", e => {
+  if (e.target.matches(".checklist input")) {
+    checks[e.target.id] = e.target.checked;
+    try { localStorage.setItem("ckp-checks", JSON.stringify(checks)); } catch (err) {}
+  }
+});
+window.addEventListener("hashchange", () => {
+  const { l } = parseHash();
+  if (l && l !== lang) { lang = l; renderChrome(); }
+  render(true);
+});
+
+{
+  const { l } = parseHash();
+  if (l) lang = l;
+}
+renderChrome();
+render(false);
+</script>
+</body>
+</html>
